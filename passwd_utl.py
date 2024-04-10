@@ -1,0 +1,63 @@
+import os
+import hashlib
+from colorama import Fore, Style
+
+KEY_FILE = ".GKY"
+
+
+def is_valid_password(password: str) -> bool:
+    min_length = 8
+    has_uppercase = any(c.isupper() for c in password)
+    has_lowercase = any(c.islower() for c in password)
+    has_digit = any(c.isdigit() for c in password)
+    has_special_char = any(c in "!@#%^&*/()-¡?^[a-z][-a-z0-9._]*$" for c in password)
+    return len(password) >= min_length and has_uppercase and has_lowercase and has_digit and has_special_char
+
+
+def generate_key(input_file: str, password: bytes) -> bytes:
+    salt = os.urandom(16)
+    key = hashlib.pbkdf2_hmac('sha256', password, salt, 100000, 32)
+    key_with_salt = salt + key
+
+    # Guardar la clave en un archivo .key único para cada archivo de entrada
+    base_file = os.path.splitext(input_file)[0]  # Remove the .gie extension
+    key_file_path = base_file + KEY_FILE
+    with open(key_file_path, "wb") as key_file:
+        key_file.write(key_with_salt)
+
+    print(".GKY generated successfully.")
+    # print(f"Key length: {len(key)}")
+    # print(f"Salt length: {len(salt)}")
+
+    return key_with_salt
+
+
+def get_key(input_file: str, password: bytes) -> bytes:
+    base_file = os.path.splitext(os.path.basename(input_file))[0]  # Remove all extensions
+    # Add the .key extension to the base file name
+    key_file = os.path.join(os.path.dirname(input_file), base_file + KEY_FILE)
+    print(f"Buscando el archivo de la clave: {key_file}")  # Print the name of the key file we are looking for
+    if os.path.exists(key_file):
+        with open(key_file, "rb") as f:
+            key_with_salt = f.read()
+            salt = key_with_salt[:16]  # Get the stored salt
+            derived_key = hashlib.pbkdf2_hmac('sha256', password, salt, 100000, 32)
+            # print("La clave se recuperó con éxito.")
+            # print(f"Longitud de la clave: {len(derived_key)}")
+            # print(f"Longitud del salt: {len(salt)}")
+            return derived_key  # Return the full key
+    print(Fore.RED + "No se encontró la clave." + Style.RESET_ALL)
+    return b''
+
+
+def verify_password(input_file: str, password: bytes) -> bool:
+    base_file = os.path.splitext(os.path.basename(input_file))[0]  # Remove all extensions
+    key_file = os.path.join(os.path.dirname(input_file), base_file + KEY_FILE)
+    if not os.path.exists(key_file):
+        return False
+    with open(key_file, "rb") as f:
+        key_with_salt = f.read()
+        salt = key_with_salt[:16]  # Obtener el salt almacenado
+        stored_key = key_with_salt[16:]  # Obtener la clave almacenada
+        derived_key = hashlib.pbkdf2_hmac('sha256', password, salt, 100000, 32)
+        return stored_key == derived_key
