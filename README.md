@@ -20,7 +20,9 @@ An Encryptor and Decryptor for files and folders for Windows, written in Python.
 **GIE V3.0**
 
 ### Features
-Create and Crack through brute force using a dictionary or wordlist.
+Encrypt and decrypt your files and folders with AES, for any file, jpg, png, mp4, mp3, docx, pdf, etc... 
+
+**IMPORTANT TO READ ALL**
 
 ## 📦 Requirements
 **[Python3](https://www.python.org/downloads/)**
@@ -57,6 +59,7 @@ Run the project
 ```
 python gie.py -h
 ```
+---
 
 ## For Encrypt
 Run `-h` for print the help/usage
@@ -70,21 +73,58 @@ To **Encrypt** a folder or file
 
 For folders
 ```
-python gie.py "C:\ProgramData\Riot Games"
+python gie.py "C:\YOUR\FOLDER"
 ```
 
 For only files
 ```
-python gie.py "C:\ProgramData\Riot Games\lol.exe"
+python gie.py "C:\YOUR\FILES.extension"
 ```
+
+extension = jpg, png, mp3, mp4, docx, etc, etc...
 
 * ! A message will appear that says: "Enter a password:"
 
 ! NOTE: **The password cannot contain the characters $ and "**
 
-*Once the password is written, the files with the* **".gie"** *extension will begin to be encrypted and a **".GKY"** *file will be generated, which is very important to decrypt your original file*
+Example Output:
+`python gie.py "D:\Sam\Plugins\IP.exe"`
+`Enter a password:      `
+
+Note: The password will not be visible while you type it
+
+Once the password is entered, it will start encrypting the files with the extension **".gie"** and will generate a **".GKY"** file, which is very important to decrypt your original file.
+
+*"GKY" is the extension of the file containing the key for decryption, along with the password provided.*
+
+! *If you want to share the file with your colleague, you will need to provide him/her with three files, the .gie, the .GKY and the password.*
+
 
 ## For Decrypt
+
+To **Decrypt** a folder or file 
+* ! The path and password must be enclosed in quotes " " 
+
+Run `-d` for decrypt
+Run `-p` for set the password used previously
+
+For folders
+```
+python gie.py -p "PASSWORD" -d "C:\YOUR\FOLDER"
+```
+
+For only files
+```
+python gie.py -p "PASSWORD" -d "C:\YOUR\FILES.extension.gie"
+```
+---
+
+Example Output:
+`python gie.py -p "L1ñy*8Cv" -d "D:\Sam\Plugins\IP.exe"`
+
+The program will search if the .GKY file exists in the path provided and will try to decrypt the file with the password, if the password does not match the file will not decrypt or will decrypt corruptly, if the GKY does not exist, the program will throw an error message and will not be able to decrypt.
+
+It is very important to save the .GKY and the PASSWORD very well.
 
 ---
 ### TODO List
