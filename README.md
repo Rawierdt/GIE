@@ -40,33 +40,51 @@ Execute the commands according to your case (Win or Linux)
 
 Clone or Download this Repository
 ```
-git clone https://github.com/Rawierdt/Anayansi.git
+git clone git@github.com:Rawierdt/GIE.git
 ```
-Update Repositories
-```
-sudo apt update
-```
+
 Change Directory
 ```
-cd Anayansi
+cd GIE
 ```
 Run the setup.py file
 ```
 python setup.py
 ```
 OR install the dependencies manually
-```
-pip install -r requirements.txt
-```
+
 Run the project
 ```
-python gie.py
+python gie.py -h
 ```
 
-## What is Wordlist?
-A "Wordlist" is a list of words or characters listed in a text file, an example of which is "rockyou.txt", and others.
+## For Encrypt
+Run `-h` for print the help/usage
 
-I will not provide the Wordlist mentioned, but searching for it is not complicated.
+```
+python gie.py -h
+```
+
+To **Encrypt** a folder or file 
+* ! The path must be enclosed in quotes " " 
+
+For folders
+```
+python gie.py "C:\ProgramData\Riot Games"
+```
+
+For only files
+```
+python gie.py "C:\ProgramData\Riot Games\lol.exe"
+```
+
+* ! A message will appear that says: "Enter a password:"
+
+! NOTE: **The password cannot contain the characters $ and "**
+
+*Once the password is written, the files with the* **".gie"** *extension will begin to be encrypted and a **".GKY"** *file will be generated, which is very important to decrypt your original file*
+
+## For Decrypt
 
 ---
 ### TODO List
