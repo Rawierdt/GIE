@@ -47,9 +47,6 @@ def decrypt_file(input_file: str, password: bytes):
             key_with_salt = f.read()
             salt = key_with_salt[:16]  # Get the stored salt
             derived_key = hashlib.pbkdf2_hmac('sha256', password, salt, 100000, 32)
-            # print("La clave se recuperó con éxito.")
-            # print(f"Longitud de la clave: {len(derived_key)}")
-            # print(f"Longitud del salt: {len(salt)}")
 
         with open(input_file, "rb") as file_in:
             iv = file_in.read(16)
@@ -70,7 +67,6 @@ def decrypt_file(input_file: str, password: bytes):
 
         # Delete the key file after successful decryption
         os.remove(key_file)
-        # print(f"Archivo de la clave {key_file} eliminado con éxito.")
 
     else:
         print(Fore.LIGHTRED_EX + "No se encontró la clave." + Style.RESET_ALL)
